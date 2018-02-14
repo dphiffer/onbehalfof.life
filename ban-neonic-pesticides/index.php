@@ -1,8 +1,5 @@
 <?php
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
 $base_path = '/ban-neonic-pesticides';
 $url = "https://onbehalfof.life$base_path/";
 $comment_url = 'https://www.regulations.gov/comment?D=EPA-HQ-OPP-2011-0865-0250';
