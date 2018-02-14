@@ -23,7 +23,7 @@ END;
 
 // Facebook card
 $og_title = 'ON BEHALF OF LIFE';
-$og_description = $call_to_action;
+$og_description = ucfirst($call_to_action);
 $og_image = "https://onbehalfof.life$base_path/card.jpg";
 $og_url = $url;
 
