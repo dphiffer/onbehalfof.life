@@ -3,7 +3,7 @@ var canvas, ctx, species;
 var ignore_hashchange = false;
 
 function choose(reload) {
-	var url = 'species.php';
+	var url = '/species.php';
 	if (reload) {
 		url += '?reload=1';
 	}
@@ -58,7 +58,7 @@ function imghandle(img) {
 
 function load(id) {
 	console.log('load ' + id);
-	$.get('species.php?id=' + id, function(rsp) {
+	$.get('/species.php?id=' + id, function(rsp) {
 		species = rsp.species;
 		init();
 	});
@@ -69,8 +69,8 @@ function init() {
 	var link = '<a href="' + url + '" target="_blank">' + species.common.toUpperCase() + ' (<i>' + species.latin + '</i>)</a>';
 	$('#life').html(link);
 	$('#another').html(link);
-	src_list.push('species/' + species.id + '.jpg');
-	src_list.push('media/onbehalfof.life-template.png');
+	src_list.push('/species/' + species.id + '.jpg');
+	src_list.push('template-inverted.png');
 	$('#custom').html('<canvas width="640" height="640"></canvas>');
 	canvas = $('#custom canvas')[0];
 	ctx = canvas.getContext('2d');
@@ -109,7 +109,7 @@ $(document).ready(function() {
 		choose(e.shiftKey);
 	});
 
-	$.get('species.html', function(rsp) {
+	$.get('/species.html', function(rsp) {
 		$('#all-species').html(rsp);
 	});
 });
