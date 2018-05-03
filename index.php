@@ -1,3 +1,3 @@
 <?php
 
-header('Location: /ban-neonic-pesticides/');
+header('Location: /weedy-affairs/');

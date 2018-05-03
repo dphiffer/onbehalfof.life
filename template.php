@@ -25,21 +25,34 @@
 			<h1>On behalf of <span id="life">all life</span>, <?php echo $call_to_action; ?></h1>
 			<div class="columns">
 				<div id="intro"><?php echo $intro; ?></div>
-				<a id="button" href="<?php echo $comment_url; ?>" target="_blank">Submit a public comment</a>
-				<div id="deadline">The deadline is <?php echo $deadline; ?>.</div>
+				<?php if (! empty($comment_url)) { ?>
+					<a id="button" href="<?php echo $comment_url; ?>" target="_blank">Submit a public comment</a>
+				<?php } ?>
+				<?php if (! empty($deadline)) { ?>
+					<div id="deadline">The deadline is <?php echo $deadline; ?>.</div>
+				<?php } ?>
 				<a href="#" id="reload">Pick another species</a>
 			</div>
 			<div class="columns" id="share-img"></div>
 			<br class="clear">
-			<div id="example">
-				<h2>Example: <b><?php echo $example_title; ?></b></h2>
-				<blockquote>
-					<?php echo $example_quote; ?>
-				</blockquote>
-			</div>
-			<div id="onbehalfof">
-				<a href="https://www.regulations.gov/comment?D=EPA-HQ-OA-2017-0533-0219" target="_blank"><img src="/media/onbehalfof.jpg" alt="On behalf of..."></a>
-			</div>
+			<?php if (! empty($example_title)) { ?>
+				<div id="example">
+					<h2>Example: <b><?php echo $example_title; ?></b></h2>
+					<blockquote>
+						<?php echo $example_quote; ?>
+					</blockquote>
+				</div>
+			<?php } ?>
+			<?php if (! empty($comment_url)) { ?>
+				<div id="onbehalfof">
+					<a href="<?php echo $comment_url; ?>" target="_blank"><img src="/media/onbehalfof.jpg" alt="On behalf of..."></a>
+				</div>
+			<?php } ?>
+			<?php if (! empty($below_text)) { ?>
+				<div id="below-text">
+					<?php echo $below_text; ?>
+				</div>
+			<?php } ?>
 			<h2><a href="#statement"><i>Read more example text below</i></a></h2>
 		</div>
 		<div id="mugwort">
@@ -59,14 +72,24 @@
 		</div>
 		<div id="statement" class="container">
 			<h2>Statement from the <a href="http://www.environmentalperformanceagency.com/">Environmental Performance Agency</a></h2>
-			<em>If any or all of this resonates with you, feel free to copy and paste in your <a href="<?php echo $comment_url; ?>" target="_blank">Public Comment</a>.</em>
+			<em>If any or all of this resonates with you, feel free to copy and paste in your <?php if (! empty($comment_url)) { ?><a href="<?php echo $comment_url; ?>" target="_blank"><?php } ?>Public Comment<?php if (! empty($comment_url)) { ?></a><?php } ?>.</em>
 			<p>We believe the US EPA has an obligation to preserve and support the atmosphere, lithosphere, biosphere and all the other spheres of life both human and nonhuman for all present and future generations and the undersigned species and their ecosystem partners.</p>
 			<p>We believe the survival of all life is threatened by the degradation of the environment and increased changes to the climate as evidenced by increasingly frequent wildfires, sea level rise, drought, and flood events. We believe public-private partnerships (corporate cronyism) are asymmetrical and benefit private partners over the health of the public, protection of which is the explicit mission of the US EPA. Despite knowledge of climate change impacts, US EPA’s inaction perpetuates the degradation of the environment, threatening all existing species with ecosystem and food system collapse.</p>
 			<p>We believe in the agency of all life forms, and believe the US EPA should create equitable spaces for life to thrive in a time of extinction. To do this, the US EPA strategic plan must reflect the diverse needs of a changing ecosystem in the US and its territories Puerto Rico and the US Virgin Islands&mdash;and not of the private industries that continue to exploit and ravage these communities.</p>
 			<p>The US EPA’s core mission should deliver real results, which should include ban of toxic chemicals, support of healthy soil practices, removal of pesticides from agricultural use, clean water without lead, divestment from fossil fuels and the rejection of current and proposed oil pipeline infrastructure.</p>
 			<p>Yes let’s rebalance the power between Washington, the states, and the people. Not only for the American People but for the planet.</p>
 			<p>The US EPA should administer the law and refocus the Agency toward climate change legislation, enforcement and resiliency planning&mdash;to ensure the integrity of all life forms on the planet.</p>
-			<?php echo $more_info; ?>
+			<?php
+
+			if (! empty($more_info)) {
+				echo $more_info;
+			}
+
+			if (! empty($credits)) {
+				echo $credits;
+			}
+
+			?>
 			<h2>On behalf of</h2>
 			<div id="all-species"></div>
 		</div>
