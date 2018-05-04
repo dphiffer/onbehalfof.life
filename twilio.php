@@ -43,7 +43,7 @@ if (! empty($_POST['From'])) {
 	if ($type == 'sms') {
 		$comment['twilio_id'] = $_POST['SmsSid'];
 		$comment['message'] = $_POST['Body'];
-		twilio_sms_response('Thank you for your Public Comment!');
+		twilio_sms_response('Thank you for your Public Comment! Your comment will appear on our website, onbehalfof.life, and will be delivered to the US EPA headquarters on June 15.');
 		twilio_create_comment($comment);
 	} else if ($type == 'ring') {
 		twilio_ring_response('Please leave your public comment for the US EPA on behalf of all life. Press pound when you are done.');
@@ -152,6 +152,7 @@ function twilio_get_comments() {
 	$query = $db->query("
 		SELECT *
 		FROM comment
+		WHERE visible = 1
 		ORDER BY created DESC
 	");
 	$comments = array();
