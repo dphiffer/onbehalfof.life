@@ -2,11 +2,11 @@
 
 $dir = __DIR__;
 $setup_db = false;
-if (! file_exists("$dir/twilio.db")) {
+if (! file_exists("$dir/twilio/twilio.db")) {
 	$setup_db = true;
 }
 
-$db = new PDO("sqlite://$dir/twilio.db");
+$db = new PDO("sqlite://$dir/twilio/twilio.db");
 
 if ($setup_db) {
 	$db->query("
@@ -49,7 +49,7 @@ if (! empty($_POST['From'])) {
 		twilio_ring_response('Please leave your public comment for the US EPA on behalf of all life. Press pound when you are done.');
 	} else if ($type == 'recording') {
 		$audio = date('Ymd-His-') . substr($_POST['From'], -4, 4) . '.mp3';
-		$filename = __DIR__ . "/audio/$audio";
+		$filename = __DIR__ . "/twilio/$audio";
 		$comment['audio'] = $audio;
 		$comment['duration'] = intval($_POST['RecordingDuration']);
 		$comment['twilio_id'] = $_POST['CallSid'];

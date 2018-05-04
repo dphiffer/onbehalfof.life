@@ -42,7 +42,7 @@ function get_comment_html($comment) {
 		if (! empty($comment->message)) {
 			$html .= "<div class=\"comment-message\">$comment->message</div>\n";
 		}
-		$html .= "<audio src=\"/audio/$comment->audio\" type=\"audio/mpeg\" controls></audio>\n";
+		$html .= "<audio src=\"/twilio/$comment->audio\" type=\"audio/mpeg\" controls></audio>\n";
 	}
 	$html .= "</div>\n";
 
