@@ -1,12 +1,70 @@
 <?php
 
+$root = dirname(__DIR__);
+
+include_once("$root/twilio.php");
+
 $base_path = '/weedy-affairs';
 $url = "https://onbehalfof.life$base_path/";
 //$comment_url = 'https://www.regulations.gov/comment?D=EPA-HQ-OPP-2011-0865-0250';
 
 $call_to_action = 'CALL OR TEXT <strong>(240) 808-2372</strong>';
 $intro = "On behalf of ALL LIFE, we demand that the US EPA offers environmental protection and climate justice for ALL LIFE.";
-$deadline = 'June 16, 2018';
+$deadline = 'June 14, 2018';
+
+function get_comment_html($comment) {
+	global $comment_count;
+
+	if (empty($comment->visible)) {
+		return '';
+	}
+
+	if (empty($comment_count)) {
+		$comment_count = 1;
+	} else {
+		$comment_count++;
+	}
+
+	$html = '';
+
+	$class = ($comment_count > 3) ? ' more-comments' : '';
+	if ($comment_count == 4) {
+		$html .= '<a href="#more-comments" id="more-comments">Show more comments</a>';
+	}
+
+	$phone = preg_replace('/^\+\d+(\d{4})$/', 'xxx-xxx-$1', $comment->phone);
+	$html .= "<div class=\"public-comment $comment->type $class\">\n";
+	if ($comment->type == 'sms') {
+		$html .= "<h3>SMS from $phone</h3>\n";
+		$html .= "<div class=\"comment-message\">$comment->message</div>\n";
+	} else if ($comment->type == 'recording') {
+		$html .= "<h3>Call from $phone</h3>\n";
+		if (! empty($comment->message)) {
+			$html .= "<div class=\"comment-message\">$comment->message</div>\n";
+		}
+		$html .= "<audio src=\"/audio/$comment->audio\" type=\"audio/mpeg\" controls></audio>\n";
+	}
+	$html .= "</div>\n";
+
+	return $html;
+}
+
+$comments = twilio_get_comments();
+$comments_html = '';
+foreach ($comments as $comment) {
+	$comments_html .= get_comment_html($comment);
+}
+
+if (empty($comments_html)) {
+	$comments_html = '(no public comments yet)';
+}
+
+$public_comments = <<<END
+<div id="public-comments">
+	<h2>Public Comments</h2>
+	$comments_html
+</div>
+END;
 
 //$example_title = 'European praying mantis (<i>Mantis religiosa</i>)';
 //$example_quote = 'On behalf of the European praying mantis, <i>Mantis religiosa</i>, I demand the EPA reconsider its decision to allow the continued use of neonicotinoid pesticides. Like many pesticides, these substances leak into the ecosystem far beyond agricultural fields and their initial target organisms. Like other systemic pesticides, they are absorbed into the flesh of plants, spreading neurotoxic poisons throughout their tissues, including the sap, nectar and pollen. These are then taken up by insects (like the beneficial and elegant mantis!) and birds, building up in their bodies through repeated exposure, a cumulative and irreversible process. Europe has a temporary ban in place and is moving towards a permanent one as evidence mounts against these pesticides. The U.S. EPA’s own research shows it would be advisable to do the same here. While the EPA waits to act, widespread use continues, producing “severe effects on a range of organisms that provide ecosystem services like pollination and natural pest control, as well as on biodiversity” according to a 2015 report by the European Academies Science Advisory Council. There are enough toxic substances cycling in our environment, incrementally poisoning organisms large and small. On behalf of <i>Mantis religiosa</i>, I demand an end to this pernicious cycle.';

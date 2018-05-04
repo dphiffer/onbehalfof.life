@@ -32,6 +32,13 @@
 					<div id="deadline">The deadline is <?php echo $deadline; ?>.</div>
 				<?php } ?>
 				<a href="#" id="reload">Pick another species</a>
+				<?php
+
+				if (! empty($public_comments)) {
+					echo $public_comments;
+				}
+
+				?>
 			</div>
 			<div class="columns" id="share-img"></div>
 			<br class="clear">

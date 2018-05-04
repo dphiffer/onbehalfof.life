@@ -216,6 +216,39 @@ video {
 	border-top: 4px solid #000;
 }
 
+#public-comments {
+	width: calc(100% - 20px);
+}
+
+.public-comment {
+	border-bottom: 1px solid #ccc;
+	padding-bottom: 10px;
+	margin-bottom: 10px;
+}
+
+.comment-message {
+	padding-bottom: 10px;
+}
+
+.public-comment audio {
+	width: 100%;
+}
+
+.public-comment h3 {
+	font-weight: normal;
+	text-transform: uppercase;
+	font-size: 12px;
+	letter-spacing: 1px;
+}
+
+#public-comments .more-comments {
+	display: none;
+}
+
+#public-comments.show-more .more-comments {
+	display: block;
+}
+
 @media only screen and (max-width: 894px) {
 
 	#mugwort h1 {
@@ -269,6 +302,10 @@ video {
 
 	#onbehalfof img {
 		display: none;
+	}
+
+	#public-comments {
+		width: 100%;
 	}
 
 }

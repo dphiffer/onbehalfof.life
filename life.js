@@ -112,4 +112,10 @@ $(document).ready(function() {
 	$.get('/species.html', function(rsp) {
 		$('#all-species').html(rsp);
 	});
+
+	$('#more-comments').click(function(e) {
+		e.preventDefault();
+		$('#public-comments').addClass('show-more');
+		$('#more-comments').css('display', 'none');
+	});
 });
