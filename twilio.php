@@ -85,8 +85,6 @@ function twilio_add_media($comment) {
 		$filename = "$when-$who-$num.$ext";
 		if ($ext == 'jpg') {
 			$msg .= "\n<img src=\"/twilio/$filename\">";
-		} else if ($ext == 'mp4') {
-			$msg .= "\n<video src=\"/twilio/$filename\" controls></video>";
 		}
 		$num++;
 	}
