@@ -43,6 +43,7 @@ if (! empty($_POST['From'])) {
 	if ($type == 'sms') {
 		$comment['twilio_id'] = $_POST['SmsSid'];
 		$comment['message'] = $_POST['Body'];
+		$comment = twilio_add_media($comment);
 		twilio_sms_response('Thank you for your Public Comment! Your comment will appear on our website, onbehalfof.life, and will be delivered to the US EPA headquarters on June 15.');
 		twilio_create_comment($comment);
 	} else if ($type == 'ring') {
@@ -57,6 +58,40 @@ if (! empty($_POST['From'])) {
 		twilio_create_comment($comment);
 	}
 	exit;
+}
+
+function twilio_add_media($comment) {
+	$num = 0;
+	$dir = __DIR__;
+	$msg = $comment['message'];
+	while (! empty($_POST["MediaUrl$num"])) {
+
+		$type = $_POST["MediaContentType$num"];
+		if ($type == 'image/jpeg') {
+			$ext = 'jpg';
+		} else {
+			continue;
+		}
+
+		curl_setopt($ch, CURLOPT_URL, $_POST["MediaUrl$num"]);
+		curl_setopt($ch, CURLOPT_HEADER, 0);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+		$media = curl_exec($ch);
+		curl_close($ch);
+
+		$when = date('Ymd-His');
+		$who = substr($_POST['From'], -4, 4);
+		$filename = "$when-$who-$num.$ext";
+		if ($ext == 'jpg') {
+			$msg .= "\n<img src=\"/twilio/$filename\">";
+		} else if ($ext == 'mp4') {
+			$msg .= "\n<video src=\"/twilio/$filename\" controls></video>";
+		}
+		$num++;
+	}
+	$comment['message'] = $msg;
+	return $comment;
 }
 
 function twilio_sms_response($response) {
@@ -88,6 +123,7 @@ function twilio_save_recording($filename, $response) {
 	curl_setopt($ch, CURLOPT_URL, $url);
 	curl_setopt($ch, CURLOPT_HEADER, 0);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
 	$mp3 = curl_exec($ch);
 	curl_close($ch);
 	file_put_contents($filename, $mp3);
