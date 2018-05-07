@@ -19,6 +19,7 @@ if ($setup_db) {
 			audio VARCHAR(255),
 			duration INTEGER,
 			visible INTEGER DEFAULT 1,
+			featured INTEGER DEFAULT 0,
 			created DATETIME,
 			updated DATETIME
 		);
@@ -187,7 +188,7 @@ function twilio_get_comments() {
 		SELECT *
 		FROM comment
 		WHERE visible = 1
-		ORDER BY created DESC
+		ORDER BY featured DESC, created DESC
 	");
 	$comments = array();
 	while ($row = $query->fetchObject()) {
