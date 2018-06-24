@@ -102,7 +102,7 @@
 			<div class="template">
 				<a href="template.png"><img src="template.png" alt="www.onbehalfof.life"></a>
 			</div>
-			<a href="example2.png"><img src="example2.png" alt="www.onbehalfof.life"></a>
+			<a href="example2.jpg"><img src="example2.jpg" alt="www.onbehalfof.life"></a>
 			<br class="clear">
 			<p><a href="<?php echo $base_path; ?>/template.png">Download the template to add your own background image.</a> (<a href="<?php echo $base_path; ?>/template-inverted.png">Inverted text version</a>)</p>
 			<div id="custom"></div>
