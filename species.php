@@ -7,8 +7,54 @@ species();
 
 function species() {
 	global $photo, $species;
+
+	$species_list = array(
+		'transparency' => array(
+			48599,
+			48178,
+			167829,
+			55757,
+			58961,
+			55727,
+			47911,
+			59029,
+			53059,
+			52856,
+			58127,
+			52927,
+			119792
+		)
+	);
+
+	$species_arg = null;
+	$list = null;
+
+	if (! empty($_GET['species_list'])) {
+		$species_arg = $_GET['species_list'];
+	}
+
+	if (! empty($species_arg) &&
+		! empty($species_list[$species_arg])) {
+		$list = array();
+		foreach ($species_list[$species_arg] as $species_id) {
+			$json = file_get_contents("species/$species_id.json");
+			$list[] = json_decode($json);
+		}
+	}
+
 	if (empty($_GET['id'])) {
-		if (empty($_GET['reload'])) {
+		if (! empty($species_arg) &&
+		    ! empty($species_list[$species_arg])) {
+			$ids = $species_list[$species_arg];
+			$index = rand(0, count($ids) - 1);
+			$id = $ids[$index];
+		} else if (! empty($_GET['reload'])) {
+			$json = file_get_contents('species.json');
+			$species = json_decode($json, 'as hash');
+			$max = count($species['ids']);
+			$index = rand(0, $max - 1);
+			$id = $species['ids'][$index];
+		} else {
 			$files = glob('species/*.json');
 			$ids = array();
 			foreach ($files as $file) {
@@ -18,12 +64,6 @@ function species() {
 			}
 			$index = rand(0, count($ids) - 1);
 			$id = $ids[$index];
-		} else {
-			$json = file_get_contents('species.json');
-			$species = json_decode($json, 'as hash');
-			$max = count($species['ids']);
-			$index = rand(0, $max - 1);
-			$id = $species['ids'][$index];
 		}
 	} else {
 		$id = intval($_GET['id']);
@@ -79,9 +119,15 @@ function species() {
 		}
 	}
 
-	header('Content-Type: application/json');
-	echo json_encode(array(
+	$rsp = array(
 		'species' => $species,
 		'photo' => $photo
-	));
+	);
+
+	if (! empty($list)) {
+		$rsp['list'] = $list;
+	}
+
+	header('Content-Type: application/json');
+	echo json_encode($rsp);
 }

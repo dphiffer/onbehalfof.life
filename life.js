@@ -2,15 +2,48 @@ var src_list = [];
 var canvas, ctx, species;
 var ignore_hashchange = false;
 
+$('select[name="species_id"').change(function() {
+	var hash = '#species' + $('select[name="species_id"').val();
+	if (location.hash != hash) {
+		window.location = hash;
+	}
+});
+
+function setup_select(rsp) {
+	if ($('select[name="species_id"').length == 0) {
+		return;
+	}
+	var select = $('select[name="species_id"')[0];
+	var selected = 0;
+	for (var i = 0; i < rsp.list.length; i++) {
+		var name = rsp.list[i].common + ' (' + rsp.list[i].latin + ')';
+		var value = rsp.list[i].id;
+		if (value == rsp.species.id) {
+			selected = i;
+		}
+		var option = document.createElement('option');
+		option.value = value;
+		option.innerHTML = name;
+		select.appendChild(option);
+	}
+	select.selectedIndex = selected;
+}
+
 function choose(reload) {
 	var url = '/species.php';
 	if (reload) {
 		url += '?reload=1';
 	}
+	var species_list = $('body').data('species-list');
+	if (species_list) {
+		var sep = url.indexOf('?') == -1 ? '?' : '&';
+		url += sep + 'species_list=' + species_list;
+	}
 	$.get(url, function(rsp) {
 		species = rsp.species;
 		ignore_hashchange = true;
 		window.location = '#species' + species.id;
+		setup_select(rsp);
 		init();
 	});
 }
@@ -44,7 +77,13 @@ function imghandle(img) {
 		imgload();
 	} else {
 		var data_uri = canvas.toDataURL();
-		$('#share-img').html('<figure><img><figcaption><a href="https://www.inaturalist.org/taxa/' + species.id + '" target="_blank"><i>' + species.latin + '</i> on iNaturalist.org</a>.<div class="attr">PHOTO: <a href="' + species.photo_url + '" target="_blank">' + species.photo_attr + '</a></div></figcaption></figure>');
+		var attr = '';
+		if ('photo_url' in species && 'photo_attr' in species) {
+			attr = '<div class="attr">PHOTO: <a href="' + species.photo_url + '" target="_blank">' + species.photo_attr + '</a></div>';
+		} else if ('specialty' in species) {
+			attr = '<div class="attr">' + species.specialty + '</div>';
+		}
+		$('#share-img').html('<figure><img><figcaption><a href="https://www.inaturalist.org/taxa/' + species.id + '" target="_blank"><i>' + species.latin + '</i> on iNaturalist.org</a>.' + attr + '</figcaption></figure>');
 		$('#share-img img')[0].src = data_uri;
 		if ($('#share-img2').length > 0) {
 			$('#share-img2')[0].src = data_uri;
@@ -57,9 +96,14 @@ function imghandle(img) {
 }
 
 function load(id) {
-	console.log('load ' + id);
-	$.get('/species.php?id=' + id, function(rsp) {
+	var url = '/species.php?id=' + id;
+	var species_list = $('body').data('species-list');
+	if (species_list) {
+		url += '&species_list=' + species_list;
+	}
+	$.get(url, function(rsp) {
 		species = rsp.species;
+		setup_select(rsp);
 		init();
 	});
 }
@@ -109,13 +153,47 @@ $(document).ready(function() {
 		choose(e.shiftKey);
 	});
 
-	$.get('/species.html', function(rsp) {
-		$('#all-species').html(rsp);
-	});
-
 	$('#more-comments').click(function(e) {
 		e.preventDefault();
 		$('#public-comments').addClass('show-more');
 		$('#more-comments').css('display', 'none');
+	});
+
+	$('#comment').submit(function(e) {
+		e.preventDefault();
+		var values = $('#comment').serialize();
+		$('#comment .button').val('Submitting comment...');
+		$('#comment .button').addClass('disabled');
+		$('#comment .button').attr('disabled', 'disabled');
+		$('#comment input[type="text"], #comment input[type="email"], #comment select, #comment textarea').attr('disabled', 'disabled');
+		$.post('/comments.php', values, function(rsp) {
+			if (rsp.ok) {
+				$('#comment .response').html('Thank you for your public comment. We will email you when it gets submitted to the EPA.');
+				$('#comment .button').val('Processing comment...');
+				setTimeout(function() {
+					$('#comment input[type="text"], #comment input[type="email"], #comment select, #comment textarea').attr('disabled', null);
+					$('#comment .button').removeClass('disabled');
+					$('#comment .button').attr('disabled', null);
+					$('#comment .button').val('Submit public comment');
+					$('#comment input[type="text"], #comment input[type="email"], #comment textarea').val('');
+				}, 5000);
+				setTimeout(function() {
+					$('#comment .response').html('');
+				}, 10000);
+			} else {
+				if (rsp.error) {
+					$('#comment .response').html(rsp.error);
+				} else {
+					$('#comment .response').html('Uh oh, something went wrong with your submission.');
+				}
+				$('#comment .button').val('⚠️ Submission error');
+				setTimeout(function() {
+					$('#comment input[type="text"], #comment input[type="email"], #comment select, #comment textarea').attr('disabled', null);
+					$('#comment .button').removeClass('disabled');
+					$('#comment .button').attr('disabled', null);
+					$('#comment .button').val('Submit public comment');
+				}, 3000);
+			}
+		});
 	});
 });

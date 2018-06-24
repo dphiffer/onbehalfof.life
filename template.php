@@ -4,7 +4,7 @@
 		<meta charset="utf-8">
 		<title>ON BEHALF OF LIFE</title>
 		<link rel="stylesheet" href="/mensch/font.css">
-		<link rel="stylesheet" href="/life.css?3">
+		<link rel="stylesheet" href="/life.css?4">
 		<meta http-equiv="x-ua-compatible" content="ie=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta name="author" content="Environmental Performance Agency">
@@ -20,28 +20,58 @@
 		<meta name="twitter:description" content="<?php echo htmlentities($twitter_description); ?>">
 		<meta name="twitter:image" content="<?php echo htmlentities($twitter_image); ?>">
 	</head>
-	<body>
+	<body<?php if (! empty($species_list)) { echo " data-species-list=\"$species_list\""; } ?>>
 		<div class="container">
-			<h1>On behalf of <span id="life">all life</span>, <?php echo $call_to_action; ?></h1>
-			<div class="columns">
-				<div id="intro"><?php echo $intro; ?></div>
-				<?php if (! empty($comment_url)) { ?>
-					<a id="button" href="<?php echo $comment_url; ?>" target="_blank">Submit a public comment</a>
-				<?php } ?>
-				<?php if (! empty($deadline)) { ?>
-					<div id="deadline">The deadline is <?php echo $deadline; ?>.</div>
-				<?php } ?>
-				<a href="#" id="reload">Pick another species</a>
-				<?php
+			<h1>On behalf of <span id="life">life</span>, <?php echo $call_to_action; ?></h1>
+			<?php if (! empty($campaign)) { ?>
+				<h2>Send a public comment to the U.S. EPA</h2>
+				<form action="/comments.php" method="post" id="comment" class="columns">
+					<input type="hidden" name="campaign" value="<?php echo $campaign; ?>">
+					<label>
+						Name
+						<input type="text" name="name">
+					</label>
+					<label>
+						Email
+						<input type="email" name="email">
+					</label>
+					<label>
+						Submitting on behalf of
+						<select name="species_id"></select>
+					</label>
+					<label>
+						Public Comment
+						<textarea name="comment" rows="7" cols="40"></textarea>
+					</label>
+					<input type="submit" value="Submit public comment" class="button">
+					<div class="response"></div>
+					<?php if (! empty($deadline)) { ?>
+						<div id="deadline">The deadline is <?php echo $deadline; ?>.</div>
+					<?php } ?>
+				</form>
+				<div class="columns" id="share-img"></div>
+				<br class="clear">
+			<?php } else { ?>
+				<div class="columns">
+					<div id="intro"><?php echo $intro; ?></div>
+					<?php if (! empty($comment_url)) { ?>
+						<a class="button" href="<?php echo $comment_url; ?>" target="_blank">Submit a public comment</a>
+					<?php } ?>
+					<?php if (! empty($deadline)) { ?>
+						<div id="deadline">The deadline is <?php echo $deadline; ?>.</div>
+					<?php } ?>
+					<a href="#" id="reload">Pick another species</a>
+					<?php
 
-				if (! empty($public_comments)) {
-					echo $public_comments;
-				}
+					if (! empty($public_comments)) {
+						echo $public_comments;
+					}
 
-				?>
-			</div>
-			<div class="columns" id="share-img"></div>
-			<br class="clear">
+					?>
+				</div>
+				<div class="columns" id="share-img"></div>
+				<br class="clear">
+			<?php } ?>
 			<?php if (! empty($example_title)) { ?>
 				<div id="example">
 					<h2>Example: <b><?php echo $example_title; ?></b></h2>
@@ -50,7 +80,7 @@
 					</blockquote>
 				</div>
 			<?php } ?>
-			<?php if (! empty($comment_url)) { ?>
+			<?php if (! empty($comment_url) && empty($campaign)) { ?>
 				<div id="onbehalfof">
 					<a href="<?php echo $comment_url; ?>" target="_blank"><img src="/media/onbehalfof.jpg" alt="On behalf of..."></a>
 				</div>
@@ -98,9 +128,9 @@
 
 			?>
 			<h2>On behalf of</h2>
-			<div id="all-species"></div>
+			<div id="all-species"><?php include('species.html'); ?></div>
 		</div>
 		<script src="/jquery.min.js"></script>
-		<script src="/life.js?2"></script>
+		<script src="/life.js?4"></script>
 	</body>
 </html>
