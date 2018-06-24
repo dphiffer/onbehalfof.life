@@ -1,4 +1,4 @@
-<Files "twilio.db">
+<Files "comments.db">
 	Order Allow,Deny
 	Deny from all
 </Files>

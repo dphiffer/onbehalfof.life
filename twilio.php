@@ -191,6 +191,9 @@ function twilio_get_comments() {
 		ORDER BY featured DESC, created DESC
 	");
 	$comments = array();
+	if (! $query) {
+		return $comments;
+	}
 	while ($row = $query->fetchObject()) {
 		$comments[] = $row;
 	}
