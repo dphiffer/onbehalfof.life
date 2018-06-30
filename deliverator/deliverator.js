@@ -42,8 +42,18 @@ if (fs.existsSync(dotfile)) {
 	});
 }
 
-function timeout(ms) {
-	return new Promise(resolve => setTimeout(resolve, ms));
+function get_path(id, ext) {
+	if (! ext) {
+		ext = '.json';
+	}
+	let id_padded = id;
+	if (id < 100) {
+		id_padded = `0${id_padded}`;
+	}
+	if (id < 10) {
+		id_padded = `0${id_padded}`;
+	}
+	return `${__dirname}/data/comment_${id_padded}${ext}`;
 }
 
 app.post('/comment', (req, rsp) => {
@@ -76,14 +86,7 @@ app.post('/comment', (req, rsp) => {
 		}
 	});
 
-	let id_padded = id;
-	if (id < 100) {
-		id_padded = `0${id_padded}`;
-	}
-	if (id < 10) {
-		id_padded = `0${id_padded}`;
-	}
-	const details_path = `${__dirname}/data/comment_${id_padded}.json`;
+	const details_path = get_path(id);
 	let details = {
 		id: id,
 		url: req.body.url,
@@ -99,6 +102,8 @@ app.post('/comment', (req, rsp) => {
 	fs.writeFile(details_path, JSON.stringify(details, null, '\t'), (err) => {
 		if (err) {
 			throw err;
+		} else {
+			enqueue(id);
 		}
 	});
 
@@ -115,12 +120,36 @@ app.get('/', (req, rsp) => {
 	});
 });
 
-/*async comment(url, comment) => {
+var running = false;
+var queue = [];
+function enqueue(id) {
+	if (! running) {
+		running = true;
+		comment(id);
+	} else {
+		queue.push(id);
+	}
+}
+
+function timeout(ms) {
+	return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function comment(id) {
+
+	const path = get_path(id);
+	const json = fs.readFileSync(path, 'utf8');
+	const details = JSON.parse(json);
+
 	const browser = await puppeteer.launch({
 		headless: false
 	});
 	const page = await browser.newPage();
-	await page.goto(url);
+	await page.setViewport({
+		width: 1024,
+		height: 768
+	});
+	await page.goto(details.url);
 
 	let textarea = null;
 	while (! textarea) {
@@ -128,5 +157,15 @@ app.get('/', (req, rsp) => {
 		textarea = await page.$('textarea');
 	}
 
-	await textarea.type(comment);
-}*/
+	await textarea.type(details.comment);
+
+	await page.screenshot({
+		path: get_path(id, '.jpg'),
+		type: 'jpeg',
+		quality: 80,
+		fullPage: true
+	});
+	await browser.close();
+
+	running = false;
+}
