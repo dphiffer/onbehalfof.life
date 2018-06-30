@@ -2,3 +2,4 @@
 /twilio/*.mp3
 /twilio/twilio.db
 /twilio/*.jpg
+/comments.db

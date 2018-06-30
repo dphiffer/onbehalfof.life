@@ -1,5 +1,12 @@
 <?php
 
+$deliverator_url = 'https://localhost:5000/comment';
+$verify_ssl = false;
+
+$urls = array(
+	'transparency' => 'https://www.regulations.gov/comment?D=EPA-HQ-OA-2018-0259-0001'
+);
+
 $dir = __DIR__;
 $setup_db = false;
 if (! file_exists("$dir/comments.db")) {
@@ -14,6 +21,7 @@ if ($setup_db) {
 			id INTEGER PRIMARY KEY,
 			campaign VARCHAR(255),
 			species_id INTEGER,
+			deliverator_id INTEGER,
 			comment TEXT,
 			name VARCHAR(255),
 			email VARCHAR(255),
@@ -63,10 +71,52 @@ if (! empty($_POST['comment']) &&
 	$query->execute($values);
 	$id = $db->lastInsertId();
 
+	$deliverator_id = null;
+
+	$campaign = $_POST['campaign'];
+	if (! empty($urls[$campaign])) {
+
+		$species_id = intval($_POST['species_id']);
+		$species_path = __DIR__ . "/species/$species_id.json";
+		$species_json = file_get_contents($species_path);
+		$species = json_decode($species_json, 'as hash');
+		$on_behalf_of = $species['common'] . ' (' . $species['latin'] . ')';
+
+		$data = http_build_query(array(
+			'url' => $urls[$campaign],
+			'comment' => $_POST['comment'],
+			'name' => $_POST['name'],
+			'email' => $_POST['email'],
+			'on_behalf_of' => $on_behalf_of
+		));
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $deliverator_url);
+		curl_setopt($ch, CURLOPT_HEADER, false);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+		if (! $verify_ssl) {
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		}
+		$json = curl_exec($ch);
+		curl_close($ch);
+
+		$rsp = json_decode($json, 'as hash');
+		$deliverator_id = $rsp['id'];
+
+		$query = $db->prepare("
+			UPDATE comment
+			SET deliverator_id = ?
+			WHERE id = ?
+		");
+		$query->execute(array($id, $deliverator_id));
+	}
+
 	header('Content-Type: application/json');
 	echo json_encode(array(
 		'ok' => 1,
-		'id' => $id
+		'id' => $id,
+		'deliverator_id' => $deliverator_id
 	));
 } else if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	header('Content-Type: application/json');
