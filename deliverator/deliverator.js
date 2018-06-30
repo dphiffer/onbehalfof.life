@@ -29,9 +29,53 @@ server.listen(port, () => {
 	console.log(`listening on *:${port}`);
 });
 
+var comment_num = 0;
+const dotfile = `${__dirname}/.comment_num`;
+
+if (fs.existsSync(dotfile)) {
+	fs.readFile(dotfile, (err, data) => {
+		if (err) {
+			console.log(err);
+			return;
+		}
+		comment_num = parseInt(data);
+	});
+}
+
 function timeout(ms) {
 	return new Promise(resolve => setTimeout(resolve, ms));
 }
+
+app.post('/comment', (req, rsp) => {
+	if (! req.body.api_key ||
+	    config.api_keys.indexOf(req.body.api_key) === -1) {
+		rsp.send({
+			ok: false,
+			error: "Invalid 'api_key' arg."
+		});
+		return;
+	}
+
+	comment_num++;
+	let id = comment_num;
+	fs.writeFile(dotfile, comment_num.toString(), (err) => {
+		if (err) {
+			console.log(error);
+		}
+	});
+
+	rsp.send({
+		ok: true,
+		id: id
+	});
+});
+
+app.get('/', (req, rsp) => {
+	rsp.send({
+		ok: false,
+		error: 'You probably want to do a POST request to /comment'
+	});
+});
 
 /*async comment(url, comment) => {
 	const browser = await puppeteer.launch({
