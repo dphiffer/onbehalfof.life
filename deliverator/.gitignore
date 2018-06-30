@@ -1,3 +1,4 @@
 config.js
 node_modules/
 .comment_num
+data/*.json

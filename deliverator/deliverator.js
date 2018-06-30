@@ -47,6 +47,7 @@ function timeout(ms) {
 }
 
 app.post('/comment', (req, rsp) => {
+
 	if (! req.body.api_key ||
 	    config.api_keys.indexOf(req.body.api_key) === -1) {
 		rsp.send({
@@ -56,11 +57,48 @@ app.post('/comment', (req, rsp) => {
 		return;
 	}
 
+	if (! req.body.url ||
+	    ! req.body.comment ||
+	    ! req.body.name ||
+	    ! req.body.email) {
+		rsp.send({
+			ok: false,
+			error: "Required arguments: 'url', 'comment', 'name', 'email.'"
+		});
+		return;
+	}
+
 	comment_num++;
 	let id = comment_num;
 	fs.writeFile(dotfile, comment_num.toString(), (err) => {
 		if (err) {
-			console.log(error);
+			throw err;
+		}
+	});
+
+	let id_padded = id;
+	if (id < 100) {
+		id_padded = `0${id_padded}`;
+	}
+	if (id < 10) {
+		id_padded = `0${id_padded}`;
+	}
+	const details_path = `${__dirname}/data/comment_${id_padded}.json`;
+	let details = {
+		id: id,
+		url: req.body.url,
+		comment: req.body.comment,
+		name: req.body.name,
+		email: req.body.email
+	};
+
+	if (req.body.on_behalf_of) {
+		details.on_behalf_of = req.body.on_behalf_of;
+	}
+
+	fs.writeFile(details_path, JSON.stringify(details, null, '\t'), (err) => {
+		if (err) {
+			throw err;
 		}
 	});
 
