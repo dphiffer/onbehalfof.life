@@ -1,0 +1,11 @@
+module.exports = {
+	url: 'https://localhost:5000',
+	api_keys: [
+		// generate with: openssl rand -base64 32
+	],
+	ssl: {
+		key: 'ssl/localhost.key',
+		cert: 'ssl/localhost.crt'
+	},
+	port: 5000
+};
