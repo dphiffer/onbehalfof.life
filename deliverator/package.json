@@ -1,0 +1,11 @@
+{
+  "name": "deliverator",
+  "version": "0.0.1",
+  "description": "deliverating public comments",
+  "main": "deliverator.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Dan Phiffer <dan@phiffer.org>",
+  "license": "MIT"
+}
