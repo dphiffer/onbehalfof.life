@@ -15,6 +15,7 @@ function setup_select(rsp) {
 	}
 	var select = $('select[name="species_id"')[0];
 	var selected = 0;
+	select.innerHTML = '';
 	for (var i = 0; i < rsp.list.length; i++) {
 		var name = rsp.list[i].common + ' (' + rsp.list[i].latin + ')';
 		var value = rsp.list[i].id;

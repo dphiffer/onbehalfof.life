@@ -22,9 +22,21 @@
 	</head>
 	<body<?php if (! empty($species_list)) { echo " data-species-list=\"$species_list\""; } ?>>
 		<div class="container">
-			<h1>On behalf of <span id="life">life</span>, <?php echo $call_to_action; ?></h1>
+			<div id="head">
+				<?php if (! empty($video_embed)) { ?>
+					<?php $h1_class = 'smaller'; ?>
+					<div id="video" class="columns"><?php echo $video_embed; ?></div>
+				<?php } ?>
+				<h1<?php if (! empty($h1_class)) { echo ' class="' . $h1_class . '"'; } ?>>On behalf of <span id="life">life</span>, <?php echo $call_to_action; ?></h1>
+				<?php if (! empty($video_embed)) { ?>
+					<br class="clear">
+				<?php } ?>
+			</div>
 			<?php if (! empty($campaign)) { ?>
 				<h2>Send a public comment to the U.S. EPA</h2>
+				<?php if (! empty($short_example)) { ?>
+					<p><strong>Example comment:</strong> <?php echo $short_example; ?></p>
+				<?php } ?>
 				<form action="/comments.php" method="post" id="comment" class="columns">
 					<input type="hidden" name="campaign" value="<?php echo $campaign; ?>">
 					<label>
@@ -72,6 +84,9 @@
 				<div class="columns" id="share-img"></div>
 				<br class="clear">
 			<?php } ?>
+			<?php if (! empty($instructions)) { ?>
+				<?php echo $instructions; ?>
+			<?php } ?>
 			<?php if (! empty($example_title)) { ?>
 				<div id="example">
 					<h2>Example: <b><?php echo $example_title; ?></b></h2>
@@ -107,7 +122,14 @@
 			<p><a href="<?php echo $base_path; ?>/template.png">Download the template to add your own background image.</a> (<a href="<?php echo $base_path; ?>/template-inverted.png">Inverted text version</a>)</p>
 			<div id="custom"></div>
 		</div>
-		<div id="statement" class="container">
+		<div class="container">
+			<?php
+
+			if (! empty($more_info)) {
+				echo $more_info;
+			}
+
+			?>
 			<h2>Statement from the <a href="http://www.environmentalperformanceagency.com/">Environmental Performance Agency</a></h2>
 			<em>If any or all of this resonates with you, feel free to copy and paste in your <?php if (! empty($comment_url)) { ?><a href="<?php echo $comment_url; ?>" target="_blank"><?php } ?>Public Comment<?php if (! empty($comment_url)) { ?></a><?php } ?>.</em>
 			<p>We believe the US EPA has an obligation to preserve and support the atmosphere, lithosphere, biosphere and all the other spheres of life both human and nonhuman for all present and future generations and the undersigned species and their ecosystem partners.</p>
@@ -116,11 +138,12 @@
 			<p>The US EPA’s core mission should deliver real results, which should include ban of toxic chemicals, support of healthy soil practices, removal of pesticides from agricultural use, clean water without lead, divestment from fossil fuels and the rejection of current and proposed oil pipeline infrastructure.</p>
 			<p>Yes let’s rebalance the power between Washington, the states, and the people. Not only for the American People but for the planet.</p>
 			<p>The US EPA should administer the law and refocus the Agency toward climate change legislation, enforcement and resiliency planning&mdash;to ensure the integrity of all life forms on the planet.</p>
-			<?php
 
-			if (! empty($more_info)) {
-				echo $more_info;
-			}
+			<h2>About <strong>onbehalfof.life</strong></h2>
+			<p class="about">
+				OnBehalfof.Life is a platform for submitting public comments on environmental justice issues to the U.S. Environmental Protection Agency on behalf of another species. It was developed by the <a href="http://www.environmentalperformanceagency.com/">Environmental Performance Agency</a> in collaboration with <a href="https://phiffer.org/">Dan Phiffer</a> and input from Kimberly Reinhardt, Karolina Sobecka, and Tara Daino. Previous campaigns include: <a href="/epa-strategic-plan/">“We Demand a Strategic Plan”</a>, <a href="/ban-neonic-pesticides/">“It’s Time to Ban Neonic Pesticides”</a> and <a href="/weedy-affairs/">“DWA Climate Justice"</a>
+			</p>
+			<?php
 
 			if (! empty($credits)) {
 				echo $credits;

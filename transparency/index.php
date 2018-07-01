@@ -5,19 +5,33 @@ $root = dirname(__DIR__);
 $base_path = '/transparency';
 $url = "https://onbehalfof.life$base_path/";
 $comment_url = 'https://www.regulations.gov/comment?D=EPA-HQ-OA-2018-0259-0001';
+$video_embed = '<iframe width="854" height="480" src="https://www.youtube.com/embed/YwM7Vnznuho?ecver=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>';
 
 $species_list = 'transparency';
 $campaign = 'transparency';
 
-$call_to_action = 'tell the U.S. EPA: <strong>don’t weaponize transparency in science</strong>';
+$call_to_action = 'tell the U.S. EPA: <strong>don’t weaponize transparency</strong>';
 $intro = "On behalf of ALL LIFE, we demand that the US EPA offers environmental protection and climate justice for ALL LIFE.";
 $deadline = 'August 16, 2018';
 
+$short_example = 'On behalf of Paulownia (Princess tree) and its multispecies allies across the Bronx, we decry your plan to limit the use of public health data by the US EPA. Your proposed rule is a gross distortion of the call for transparency in science, and if approved, will have dire environmental justice consequences. Listen to Paulownia, an air toxicity specialist that labors in harsh urban conditions to reduce particulate matter, cool the air, and produce oxygen. Don’t use transparency in science as a trojan horse to bury public health research. Paulownia says let in the light and air, but don’t weaponize transparency! <i><a href="#worksheet">Check out the worksheet below for ideas</a></i>';
+
 $example_title = 'Princess Tree (<i>Paulownia tomentosa</i>)';
-$example_quote = 'I am writing to you on behalf of Princess Tree (Paulownia tomentosa), air toxicology consultant to the Department of Weedy Affairs. On behalf of Princess Tree and its many allies in the multispecies community of the Bronx, I write to strongly condemn your attempt to limit the scientific data that can be used by the EPA in creating environmental regulations. Princess Tree is very familiar with the polluted conditions of air alongside expressways and highways in the Bronx, as it gathers and sequesters particulate matter on its large, fuzzy leaves. Many of these particles are of the type that elevate asthma levels in the human population that lives alongside Princess Tree. The Six Cities Study carried out by Harvard in the 1990s was essential in proving to the US Environmental Protection Agency what plants like Princess Tree already know: air pollution is connected to premature death in humans (and plants!). These premature deaths in humans are felt more acutely by poor communities of color than other groups. Your plan to limit the data used by the EPA in making regulations around environmental justice issues like air pollution is a weaponization of the concept of transparency in science. Rather than limiting the range of experts we call upon to draft environmental regulations, we must expand our notion of expertise, calling on experts like Princess Tree, which thrives in harsh urban conditions and labors daily to reduce particulate matter, cool the air, produce oxygen, and stabilize soil with its large root system. Princess tree is the kind of expert who’s data we must heed in the midst of the 6th extinction, as we strive to make more space for life, human and beyond.';
+$example_quote = 'On behalf of Paulownia (Princess tree) and its multispecies allies across the Bronx, we decry your plan to limit the use of public health data by the US EPA. Your proposed rule is a gross distortion of the call for transparency in science, and if approved, will have dire environmental justice consequences. Paulownia is very familiar with the polluted conditions of air along roadways in the Bronx, as it collects particulate matter on its large, fuzzy leaves. The Six Cities Study (air pollution research carried out in the 1990s) provided essential evidence proving what plants like Paulownia already know: air pollution is connected to premature death in humans (and plants!). These premature deaths impact poor communities of color more than other groups. Your rule would discount this important study and others like it. Rather than limiting the information used to draft environmental regulations, let’s expand our notion of expertise. Listen to Paulownia, an air toxicity specialist that labors in harsh urban conditions to reduce particulate matter, cool the air, and produce oxygen. Don’t use transparency in science as a trojan horse to bury public health research. Paulownia says let in the light and air, but don’t weaponize transparency!';
+
+$instructions = <<<END
+<h2 id="worksheet"><a href="/transparency/handout.pdf">Download this worksheet PDF</a></h2>
+<a href="/transparency/handout.pdf"><img src="/transparency/handout-pg1.jpg" class="handout"></a>
+<a href="/transparency/handout.pdf"><img src="/transparency/handout-pg2.jpg" class="handout pg2"></a>
+<br class="clear">
+END;
 
 $more_info = <<<END
 <h2>More info</h2>
+<blockquote><p>"The pending E.P.A. policy would have implications for much of what the agency touches, whether it is new rules addressing climate change or regulations for pesticides and protecting children from lead paint.</p>
+
+<p>“This affects every aspect of environmental protection in the United States,” said David Michaels, assistant secretary of labor for occupational safety and health under President Barack Obama. Mr. Michaels, now a professor at George Washington University, called the plan “weaponized transparency.”"</p></blockquote>
+<p>&mdash;<a href="https://www.nytimes.com/2018/03/26/climate/epa-scientific-transparency-honest-act.html">The New York Times</a> (March 26, 2018)</p>
 <ul>
 	<li>The New Yorker: <a href="https://www.newyorker.com/science/elements/scott-pruitts-crusade-against-secret-science-could-be-disastrous-for-public-health">Scott Pruitt’s crusade against “secret science” could be disastrous for public health</a></li>
 	<li>The New York Times: <a href="https://www.nytimes.com/2018/04/24/climate/epa-science-transparency-pruitt.html">New Rule will likely have one result: Less Science in policy making</a></li>
