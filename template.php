@@ -3,8 +3,8 @@
 	<head>
 		<meta charset="utf-8">
 		<title>ON BEHALF OF LIFE</title>
-		<link rel="stylesheet" href="/mensch/font.css">
-		<link rel="stylesheet" href="/life.css?4">
+		<link rel="stylesheet" href="/mensch/fontg">
+		<link rel="stylesheet" href="/life.css?5">
 		<meta http-equiv="x-ua-compatible" content="ie=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta name="author" content="Environmental Performance Agency">
@@ -154,6 +154,6 @@
 			<div id="all-species"><?php include('species.html'); ?></div>
 		</div>
 		<script src="/jquery.min.js"></script>
-		<script src="/life.js?4"></script>
+		<script src="/life.js?5"></script>
 	</body>
 </html>
