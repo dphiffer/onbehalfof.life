@@ -2,18 +2,18 @@ var src_list = [];
 var canvas, ctx, species;
 var ignore_hashchange = false;
 
-$('select[name="species_id"').change(function() {
-	var hash = '#species' + $('select[name="species_id"').val();
+$('select[name="species_id"]').change(function() {
+	var hash = '#species' + $('select[name="species_id"]').val();
 	if (location.hash != hash) {
 		window.location = hash;
 	}
 });
 
 function setup_select(rsp) {
-	if ($('select[name="species_id"').length == 0) {
+	if ($('select[name="species_id"]').length == 0) {
 		return;
 	}
-	var select = $('select[name="species_id"')[0];
+	var select = $('select[name="species_id"]')[0];
 	var selected = 0;
 	select.innerHTML = '';
 	for (var i = 0; i < rsp.list.length; i++) {
