@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<title>ON BEHALF OF LIFE</title>
-		<link rel="stylesheet" href="/mensch/fontg">
+		<link rel="stylesheet" href="/mensch/font.css">
 		<link rel="stylesheet" href="/life.css?5">
 		<meta http-equiv="x-ua-compatible" content="ie=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
