@@ -15,11 +15,11 @@ $urls = array(
 
 $dir = __DIR__;
 $setup_db = false;
-if (! file_exists("$dir/comments.db")) {
+if (! file_exists($config['sqlite_path'])) {
 	$setup_db = true;
 }
 
-$db = new PDO("sqlite://$dir/comments.db");
+$db = new PDO("sqlite://{$config['sqlite_path']}");
 
 if ($setup_db) {
 	$db->query("
