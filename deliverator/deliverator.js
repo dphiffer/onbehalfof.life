@@ -172,8 +172,27 @@ app.get('/comment/:id.jpg', (req, rsp) => {
 
 });
 
+app.post('/retry', (req, rsp) => {
+
+	if (req.body.id) {
+		const id = parseInt(req.body.id);
+		enqueue(id);
+		rsp.send({
+			ok: true,
+			retry: id
+		});
+	} else {
+		rsp.send({
+			ok: false,
+			error: "Please include an 'id' param."
+		});
+	}
+
+});
+
 var running = false;
 var queue = [];
+
 function enqueue(id) {
 	if (! running) {
 		running = true;
@@ -218,6 +237,17 @@ async function comment(id) {
 	var details = JSON.parse(json);
 
 	console.log(details);
+
+	if (details.status != 'pending') {
+		console.log('Status is not pending, bailing out');
+		if (queue.length > 0) {
+			let next_id = queue.shift();
+			comment(next_id);
+		} else {
+			running = false;
+		}
+		return;
+	}
 
 	const browser = await puppeteer.launch({
 		headless: true,
@@ -284,12 +314,12 @@ async function comment(id) {
 		await textarea.click();
 	}
 
-	/*await page.screenshot({
+	await page.screenshot({
 		path: get_path(id, '-step1.jpg'),
 		type: 'jpeg',
 		quality: 80,
 		fullPage: true
-	});*/
+	});
 
 	const button_continue = await element(page, 'button', async el => {
 		const text = await page.evaluate(el => el.innerText, el);
@@ -312,12 +342,12 @@ async function comment(id) {
 	});
 	await checkbox_legal.click();
 
-	/*await page.screenshot({
+	await page.screenshot({
 		path: get_path(id, '-step2.jpg'),
 		type: 'jpeg',
 		quality: 80,
 		fullPage: true
-	});*/
+	});
 
 	const button_submit = await element(page, 'button', async el => {
 		const text = await page.evaluate(el => el.innerText, el);
@@ -329,7 +359,7 @@ async function comment(id) {
 	});
 	await button_submit.click();
 
-	await element(page, 'h1', async el => {
+	let h1 = await element(page, 'h1', async el => {
 		const text = await page.evaluate(el => el.innerHTML, el);
 		if (text == 'Your comment was submitted successfully!') {
 			return true;
@@ -338,38 +368,52 @@ async function comment(id) {
 		}
 	});
 
-	await page.screenshot({
-		path: get_path(id, '.jpg'),
-		type: 'jpeg',
-		quality: 80,
-		fullPage: true
-	});
+	if (! h1) {
 
-	const input_email = await element(page, 'input[type="text"]', async el => {
-		const placeholder = await page.evaluate(el => el.getAttribute('placeholder'), el);
-		if (placeholder == 'Email Address') {
-			return true;
-		} else {
-			return false;
-		}
-	});
+		await page.screenshot({
+			path: get_path(id, '-step3.jpg'),
+			type: 'jpeg',
+			quality: 80,
+			fullPage: true
+		});
 
-	await input_email.type(details.email);
+		details.status = 'error';
+	} else {
 
-	const button_email = await element(page, 'button', async el => {
-		const text = await page.evaluate(el => el.innerText, el);
-		if (text == 'Email Receipt') {
-			return true;
-		} else {
-			return false;
-		}
-	});
+		await page.screenshot({
+			path: get_path(id, '.jpg'),
+			type: 'jpeg',
+			quality: 80,
+			fullPage: true
+		});
 
-	await button_email.click();
+		const input_email = await element(page, 'input[type="text"]', async el => {
+			const placeholder = await page.evaluate(el => el.getAttribute('placeholder'), el);
+			if (placeholder == 'Email Address') {
+				return true;
+			} else {
+				return false;
+			}
+		});
+
+		await input_email.type(details.email);
+
+		const button_email = await element(page, 'button', async el => {
+			const text = await page.evaluate(el => el.innerText, el);
+			if (text == 'Email Receipt') {
+				return true;
+			} else {
+				return false;
+			}
+		});
+
+		await button_email.click();
+
+		details.status = 'delivered';
+
+	}
 
 	await browser.close();
-
-	details.status = 'delivered';
 
 	fs.writeFile(path, JSON.stringify(details, null, '\t'), (err) => {
 		if (err) {
