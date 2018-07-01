@@ -325,10 +325,10 @@ async function comment(id) {
 		}
 	});
 
-	running = false;
-
 	if (queue.length > 0) {
 		let next_id = queue.shift();
 		comment(next_id);
+	} else {
+		running = false;
 	}
 }
