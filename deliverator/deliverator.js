@@ -169,8 +169,8 @@ async function comment(id) {
 	console.log(details);
 
 	const browser = await puppeteer.launch({
-		headless: false,
-		devtools: true
+		headless: true,
+		devtools: false
 	});
 	const page = await browser.newPage();
 	await page.setViewport({
