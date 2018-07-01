@@ -91,7 +91,16 @@ if ((
 		$campaign = $_POST['campaign'];
 
 		if (! empty($_POST['remind_me'])) {
-			$response = 'We will send you a reminder soon with more information that can help craft your public comment.';
+			if (empty($_POST['email'])) {
+				header('Content-Type: application/json');
+				echo json_encode(array(
+					'ok' => false,
+					'error' => 'Sorry, we need your email address to send you a reminder!'
+				));
+				exit;
+			} else {
+				$response = 'We will send you a reminder soon with more information that can help craft your public comment.';
+			}
 		} else if (empty($urls[$campaign])) {
 			$response = 'You submitted a comment for an unknown campaign! Something must have gone wrong.';
 		} else if (! empty($config['feature_enabled_deliverator'])) {
