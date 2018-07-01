@@ -4,7 +4,7 @@
 		<meta charset="utf-8">
 		<title>ON BEHALF OF LIFE</title>
 		<link rel="stylesheet" href="/mensch/font.css">
-		<link rel="stylesheet" href="/life.css?5">
+		<link rel="stylesheet" href="/life.css?6">
 		<meta http-equiv="x-ua-compatible" content="ie=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta name="author" content="Environmental Performance Agency">
@@ -51,11 +51,15 @@
 						Submitting on behalf of
 						<select name="species_id"></select>
 					</label>
-					<label>
+					<label id="remind_me-label">
+						<input type="checkbox" name="remind_me" id="remind_me">
+						I can’t comment now but remind me later
+					</label>
+					<label id="textarea-label">
 						Public Comment
 						<textarea name="comment" rows="7" cols="40"></textarea>
 					</label>
-					<input type="submit" value="Submit public comment" class="button">
+					<input type="submit" value="Submit public comment" class="button" id="submit">
 					<div class="response"></div>
 					<?php if (! empty($deadline)) { ?>
 						<div id="deadline">The deadline is <?php echo $deadline; ?>.</div>
@@ -154,6 +158,6 @@
 			<div id="all-species"><?php include('species.html'); ?></div>
 		</div>
 		<script src="/jquery.min.js"></script>
-		<script src="/life.js?5"></script>
+		<script src="/life.js?6"></script>
 	</body>
 </html>

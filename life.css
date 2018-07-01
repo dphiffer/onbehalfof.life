@@ -136,6 +136,11 @@ textarea:focus {
 	height: 100%;
 }
 
+#remind_me-label {
+	display: block;
+	margin: 20px 0 10px 0;
+}
+
 .button {
 	font-size: 18px;
 	text-decoration: none;

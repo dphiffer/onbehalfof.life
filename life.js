@@ -163,20 +163,29 @@ $(document).ready(function() {
 	$('#comment').submit(function(e) {
 		e.preventDefault();
 		var values = $('#comment').serialize();
-		$('#comment .button').val('Submitting comment...');
+		$('#comment .button').val('Sending...');
 		$('#comment .button').addClass('disabled');
 		$('#comment .button').attr('disabled', 'disabled');
+		$('#remind_me').attr('disabled', 'disabled');
 		$('#comment input[type="text"], #comment input[type="email"], #comment select, #comment textarea').attr('disabled', 'disabled');
 		$.post('/comments.php', values, function(rsp) {
 			if (rsp.ok) {
-				$('#comment .response').html('Thank you for your public comment. We will email you when it gets submitted to the EPA.');
-				$('#comment .button').val('Processing comment...');
+				if ('response' in rsp) {
+					$('#comment .response').html(rsp.response);
+				} else {
+					$('#comment .response').html('Thank you for your public comment. You should receieve an email when your submission is received by the U.S. EPA.');
+				}
+				$('#comment .button').val('Processing...');
 				setTimeout(function() {
 					$('#comment input[type="text"], #comment input[type="email"], #comment select, #comment textarea').attr('disabled', null);
 					$('#comment .button').removeClass('disabled');
 					$('#comment .button').attr('disabled', null);
 					$('#comment .button').val('Submit public comment');
 					$('#comment input[type="text"], #comment input[type="email"], #comment textarea').val('');
+					$('#remind_me').attr('disabled', null);
+					$('#remind_me')[0].checked = false;
+					$('#textarea-label').css('display', 'block');
+					$('#submit').val('Submit public comment');
 				}, 5000);
 				setTimeout(function() {
 					$('#comment .response').html('');
@@ -193,8 +202,19 @@ $(document).ready(function() {
 					$('#comment .button').removeClass('disabled');
 					$('#comment .button').attr('disabled', null);
 					$('#comment .button').val('Submit public comment');
+					$('#remind_me').attr('disabled', null);
 				}, 3000);
 			}
 		});
+	});
+
+	$('#remind_me').change(function(e) {
+		if ($('#remind_me')[0].checked) {
+			$('#textarea-label').css('display', 'none');
+			$('#submit').val('Remind me later');
+		} else {
+			$('#textarea-label').css('display', 'block');
+			$('#submit').val('Submit public comment');
+		}
 	});
 });

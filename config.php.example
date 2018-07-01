@@ -4,5 +4,6 @@ $config = array(
 	'deliverator_url' => 'https://localhost:5000/comment',
 	'verify_ssl' => false,
 	'api_key' => 'PLZ ADD AN API KEY HERE',
-	'sqlite_path' => __DIR__ . '/comments.db'
+	'sqlite_path' => __DIR__ . '/comments.db',
+	'feature_enabled_deliverator' => true
 );
