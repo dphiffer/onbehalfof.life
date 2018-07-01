@@ -1,3 +1,3 @@
 <?php
 
-header('Location: /weedy-affairs/');
+header('Location: /transparency/');
