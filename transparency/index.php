@@ -5,7 +5,7 @@ $root = dirname(__DIR__);
 $base_path = '/transparency';
 $url = "https://onbehalfof.life$base_path/";
 $comment_url = 'https://www.regulations.gov/comment?D=EPA-HQ-OA-2018-0259-0001';
-$video_embed = '<iframe width="854" height="480" src="https://www.youtube.com/embed/YwM7Vnznuho?ecver=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>';
+$video_embed = '<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/Fch420RtqU0?rel=0&amp;showinfo=0&amp;ecver=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>';
 
 $species_list = 'transparency';
 $campaign = 'transparency';
