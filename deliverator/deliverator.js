@@ -268,7 +268,7 @@ async function comment(id) {
 		fullPage: true
 	});
 
-	/*const button_submit = await element(page, 'button', async el => {
+	const button_submit = await element(page, 'button', async el => {
 		const text = await page.evaluate(el => el.innerText, el);
 		if (text == 'Submit Comment') {
 			return true;
@@ -294,7 +294,29 @@ async function comment(id) {
 		fullPage: true
 	});
 
-	await browser.close();*/
+	const input_email = await element(page, 'input[type="text"]', async el => {
+		const placeholder = await page.evaluate(el => el.getAttribute('placeholder'), el);
+		if (placeholder == 'Email Address') {
+			return true;
+		} else {
+			return false;
+		}
+	});
+
+	await input_email.type(details.email);
+
+	const button_email = await element(page, 'button', async el => {
+		const text = await page.evaluate(el => el.innerText, el);
+		if (text == 'Email Receipt') {
+			return true;
+		} else {
+			return false;
+		}
+	});
+
+	await button_email.click();
+
+	//await browser.close();
 
 	details.status = 'delivered';
 

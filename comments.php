@@ -1,7 +1,13 @@
 <?php
 
-$deliverator_url = 'https://localhost:5000/comment';
-$verify_ssl = false;
+if (! file_exists('config.php')) {
+	die('Please set up config.php');
+}
+
+include('config.php');
+$deliverator_url = $config['deliverator_url'];
+$verify_ssl = $config['verify_ssl'];
+$api_key = $config['api_key'];
 
 $urls = array(
 	'transparency' => 'https://www.regulations.gov/comment?D=EPA-HQ-OA-2018-0259-0001'
@@ -87,7 +93,8 @@ if (! empty($_POST['comment']) &&
 			'comment' => $_POST['comment'],
 			'name' => $_POST['name'],
 			'email' => $_POST['email'],
-			'on_behalf_of' => $on_behalf_of
+			'on_behalf_of' => $on_behalf_of,
+			'api_key' => $api_key
 		));
 
 		$ch = curl_init();
@@ -116,7 +123,8 @@ if (! empty($_POST['comment']) &&
 	echo json_encode(array(
 		'ok' => 1,
 		'id' => $id,
-		'deliverator_id' => $deliverator_id
+		'rsp' => $json
+		//'deliverator_id' => $deliverator_id
 	));
 } else if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	header('Content-Type: application/json');

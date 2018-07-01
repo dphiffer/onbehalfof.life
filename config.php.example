@@ -1,0 +1,7 @@
+<?php
+
+$config = array(
+	'deliverator_url' => 'https://localhost:5000/comment',
+	'verify_ssl' => false,
+	'api_key' => 'PLZ ADD AN API KEY HERE'
+);

@@ -3,3 +3,4 @@
 /twilio/twilio.db
 /twilio/*.jpg
 /comments.db
+/config.php
