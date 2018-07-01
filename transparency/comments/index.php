@@ -31,6 +31,7 @@ $og_description = "We demand that the US EPA offers environmental protection and
 	<body>
 		<div class="container">
 			<h1>Public Comment Submissions On Behalf of Life</h1>
+			<p><a href="../">Go back to Public Comment form</a></p>
 			<div id="public-comments" data-campaign="transparency" data-url="<?php echo $config['deliverator_url']; ?>"></div>
 		</div>
 		<script src="/jquery.min.js"></script>
