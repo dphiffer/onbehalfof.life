@@ -21,7 +21,6 @@ if ('ssl' in config) {
 	server = require('http').createServer(app);
 }
 
-app.use(express.static('public'));
 app.use(body_parser.urlencoded({ extended: false }));
 
 const port = config.port || 5000;
@@ -233,12 +232,12 @@ async function comment(id) {
 		await textarea.click();
 	}
 
-	await page.screenshot({
+	/*await page.screenshot({
 		path: get_path(id, '-step1.jpg'),
 		type: 'jpeg',
 		quality: 80,
 		fullPage: true
-	});
+	});*/
 
 	const button_continue = await element(page, 'button', async el => {
 		const text = await page.evaluate(el => el.innerText, el);
@@ -261,12 +260,12 @@ async function comment(id) {
 	});
 	await checkbox_legal.click();
 
-	await page.screenshot({
+	/*await page.screenshot({
 		path: get_path(id, '-step2.jpg'),
 		type: 'jpeg',
 		quality: 80,
 		fullPage: true
-	});
+	});*/
 
 	const button_submit = await element(page, 'button', async el => {
 		const text = await page.evaluate(el => el.innerText, el);
@@ -288,7 +287,7 @@ async function comment(id) {
 	});
 
 	await page.screenshot({
-		path: get_path(id, '-step3.jpg'),
+		path: get_path(id, '.jpg'),
 		type: 'jpeg',
 		quality: 80,
 		fullPage: true
@@ -316,7 +315,7 @@ async function comment(id) {
 
 	await button_email.click();
 
-	//await browser.close();
+	await browser.close();
 
 	details.status = 'delivered';
 
@@ -327,4 +326,9 @@ async function comment(id) {
 	});
 
 	running = false;
+
+	if (queue.length > 0) {
+		let next_id = queue.shift();
+		comment(next_id);
+	}
 }
