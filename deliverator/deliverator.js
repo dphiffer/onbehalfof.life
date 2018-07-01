@@ -9,6 +9,7 @@ const express = require('express');
 const app = express();
 const body_parser = require('body-parser');
 const puppeteer = require('puppeteer');
+const cors = require('cors');
 
 var server;
 if ('ssl' in config) {
@@ -22,6 +23,7 @@ if ('ssl' in config) {
 }
 
 app.use(body_parser.urlencoded({ extended: false }));
+app.use(cors());
 
 const port = config.port || 5000;
 server.listen(port, () => {
@@ -118,6 +120,56 @@ app.get('/', (req, rsp) => {
 		ok: false,
 		error: 'You probably want to do a POST request to /comment'
 	});
+});
+
+app.get('/comment', (req, rsp) => {
+
+	fs.readdir(`${__dirname}/data`, (err, files) => {
+
+		var comments = [];
+
+		files.forEach(file => {
+			if (file.match(/\.json$/)) {
+				var data = fs.readFileSync(`${__dirname}/data/${file}`, 'utf8');
+				var comment = JSON.parse(data);
+				if ('status' in comment && comment.status == 'delivered') {
+					comments.push(comment.id);
+				}
+			}
+		});
+
+		rsp.send({
+			ok: true,
+			comments: comments
+		});
+	});
+});
+
+app.get('/comment/:id.jpg', (req, rsp) => {
+
+	var id = parseInt(req.params.id);
+	var id_padded = req.params.id;
+
+	if (id < 100) {
+		id_padded = `0${id_padded}`;
+	}
+	if (id < 10) {
+		id_padded = `0${id_padded}`;
+	}
+
+	var path = `${__dirname}/data/comment_${id_padded}.jpg`;
+	if (fs.existsSync(path)) {
+		fs.readFile(path, (err, data) => {
+			rsp.writeHead(200, {
+				'Content-Type': 'image/jpeg',
+				'Content-Length': data.length
+			});
+			rsp.end(new Buffer(data, 'binary'));
+		});
+	} else {
+		rsp.status(404).send("Sorry can't find that!");
+	}
+
 });
 
 var running = false;
