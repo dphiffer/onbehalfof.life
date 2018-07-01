@@ -123,8 +123,7 @@ if (! empty($_POST['comment']) &&
 	echo json_encode(array(
 		'ok' => 1,
 		'id' => $id,
-		'rsp' => $json
-		//'deliverator_id' => $deliverator_id
+		'deliverator' => $rsp
 	));
 } else if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	header('Content-Type: application/json');
