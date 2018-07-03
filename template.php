@@ -12,13 +12,13 @@
 		<meta name="description" content="The Environmental Performance Agency (EPA) is an artist collective founded in 2017 and named in response to the proposed defunding of the U.S. Environmental Protection Agency.">
 		<meta property="og:title" content="<?php echo htmlentities($og_title); ?>">
 		<meta property="og:description" content="<?php echo htmlentities($og_description); ?>">
-		<meta property="og:image" content="<?php echo htmlentities($og_image); ?>">
+		<meta property="og:image" content="<?php echo htmlentities($og_image); ?>?1">
 		<meta property="og:url" content="<?php echo htmlentities($og_url); ?>">
 		<meta property="og:type" content="website">
 		<meta name="twitter:card" content="summary_large_image">
 		<meta name="twitter:title" content="<?php echo htmlentities($twitter_title); ?>">
 		<meta name="twitter:description" content="<?php echo htmlentities($twitter_description); ?>">
-		<meta name="twitter:image" content="<?php echo htmlentities($twitter_image); ?>">
+		<meta name="twitter:image" content="<?php echo htmlentities($twitter_image); ?>?1">
 	</head>
 	<body<?php if (! empty($species_list)) { echo " data-species-list=\"$species_list\""; } ?>>
 		<div class="container">
